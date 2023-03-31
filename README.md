@@ -1,5 +1,14 @@
-# dmvc-prometheus-metrics
-Middleware for Prometheus Client to expose metrics using [Delphi MVC Framework](https://github.com/danieleteti/delphimvcframework).
+<div>  
+  <img alt="Prometheus Client for Delphi" height="48" src="https://ucarecdn.com/a7019e45-d14b-47cd-8ceb-70ba7848f049/" style="vertical-align: middle">
+  <h1>Delphi MVC Framework Prometheus Metrics middleware</h2>
+  <em>Middleware for Prometheus Client to expose metrics using Delphi MVC framework</em>
+</div>
+
+## Prerequisites
+
+This middleware is designed to work with [Delphi MVC Framework](https://github.com/danieleteti/delphimvcframework).
+
+If you use another library to build Web Server applications in Delphi (like [Horse](https://github.com/HashLoad/horse), [MARS](https://github.com/andrea-magni/MARS), *Web Broker*, etc.), checkout if there are [samples](https://github.com/marcobreveglieri/prometheus-client-delphi/tree/main/Samples) that can help you out bootstrapping your application or ready-to-use [middlewares](https://github.com/marcobreveglieri/prometheus-client-delphi#middlewares) for your framework.
 
 ## How to install
 
