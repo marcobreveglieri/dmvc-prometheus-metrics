@@ -1,0 +1,12 @@
+{
+	"name": "dmvc-prometheus-metrics",
+	"description": "DMVCFramework middleware for exposing metrics through Prometheus Client library for Delphi",
+	"version": "1.0.0",
+	"homepage": "https://github.com/marcobreveglieri/dmvc-prometheus-metrics",
+	"mainsrc": "./Source",
+	"projects": [],
+	"dependencies": {
+		"github.com/danieleteti/delphimvcframework": "^3.2.3",
+		"github.com/marcobreveglieri/prometheus-client-delphi": "^v0.9.0"
+	}
+}
