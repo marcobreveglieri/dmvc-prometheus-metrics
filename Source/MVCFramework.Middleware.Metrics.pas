@@ -85,6 +85,7 @@ begin
     var LExposer := TTextExposer.Create;
     try
       LExposer.Render(LStream, TCollectorRegistry.DefaultRegistry.Collect());
+	  LStream.Position := 0;
     finally
       LExposer.Free;
     end;
