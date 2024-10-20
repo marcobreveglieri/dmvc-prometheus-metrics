@@ -85,7 +85,6 @@ begin
     var LExposer := TTextExposer.Create;
     try
       LExposer.Render(LStream, TCollectorRegistry.DefaultRegistry.Collect());
-	  LStream.Position := 0;
     finally
       LExposer.Free;
     end;
@@ -93,6 +92,9 @@ begin
     LStream.Free;
     raise;
   end;
+
+  // Re-position the stream at start to avoid IIS not rendering metrics.
+  LStream.Position := 0;
 
   // Let's send all the generated text to the client.
   Context.Response.SetContentStream(LStream,
