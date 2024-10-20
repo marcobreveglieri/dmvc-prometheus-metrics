@@ -93,6 +93,9 @@ begin
     raise;
   end;
 
+  // Re-position the stream at start to avoid IIS not rendering metrics.
+  LStream.Position := 0;
+
   // Let's send all the generated text to the client.
   Context.Response.SetContentStream(LStream,
     Format('%s; charset=%s', [TMVCMediaType.TEXT_PLAIN, TMVCCharSet.UTF_8]));
