@@ -74,6 +74,7 @@ end;
 procedure TMetricsMiddleware.OnBeforeRouting(Context: TWebContext;
   var Handled: Boolean);
 begin
+  Context.Data.AddOrSetValue('RequestStartTime', FloatToStr(Now));
   // Check whether the current path request matches the metrics one.
   if not SameText(Context.Request.PathInfo, FPathInfo) then
     Exit;
