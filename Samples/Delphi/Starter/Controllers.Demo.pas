@@ -26,11 +26,6 @@ type
     [MVCHTTPMethod([httpGET])]
     [MVCProduces(TMVCMediaType.TEXT_PLAIN)]
     procedure Secret;
-
-    [MVCPath('/histogram')]
-    [MVCHTTPMethod([httpGET])]
-    [MVCProduces(TMVCMediaType.TEXT_PLAIN)]
-    procedure Histogram(Context: TWebContext);
   end;
 
 implementation
@@ -71,22 +66,6 @@ begin
 
   // Send a unauthorized status code.
   ResponseStatus(HTTP_STATUS.Unauthorized, 'You are not authorized');
-end;
-
-procedure TDemoController.Histogram(Context: TWebContext);
-var RequestDurationSeconds: Double;
-begin
-  RequestDurationSeconds := SecondSpan(Now, Context.Data.Items['RequestStartTime'].ToDouble());
-
-  // Get the metric counter from the default registry and increment it.
-  TCollectorRegistry.DefaultRegistry
-    .GetCollector<THistogram>('http_request_duration_seconds')
-    .Labels([Context.Request.PathInfo, IntToStr(HTTP_STATUS.OK)]) // path, status
-    .Observe(RequestDurationSeconds);
-
-  // Render a sample string of text as the response.
-  Render('Histogram created with properties - Path:' + Context.Request.PathInfo + ', Status:' + IntToStr(HTTP_STATUS.OK) +
-    '. The duration of this request is:' + RequestDurationSeconds.ToString);
 end;
 
 end.
