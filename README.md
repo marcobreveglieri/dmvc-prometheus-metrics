@@ -27,9 +27,25 @@ a function available from the unit *MVCFramework.Middleware.Metrics* that create
 configured.
 
 You can specify the path that exposes the metrics as a parameter or leave it blank to keep the default '/metrics' endpoint
-(which is the default path scraped by Prometheus server when collecting metric values).
+(which is the default path scraped by Prometheus server when collecting metric values):
+
+```delphi
+  Engine.AddMiddleware(GetMetricsMiddleware('/metrics'));
+```
+
+You can also initialize a structure with custom configuration values to fine tune the features available "out of the box"
+inside the middleware (e.g. HTTP request duration metrics - thanks for Tuxino for the initial implementation!):
+
+```delphi
+  begin var LConfig := TMVCMetricsMiddlewareConfig.Create('/metrics');
+    LConfig.HttpRequestDurationEnabled := True;
+    LConfig.HttpRequestDurationCollector := 'http_request_duration_seconds';
+    FEngine.AddMiddleware(GetMetricsMiddleware(LConfig));
+  end;
+```
 
 Then you can just declare the metrics you need registering them into the default collection registry.
+See the example below or the starter demo project for a tip to get started:
 
 ```delphi
 uses
@@ -75,10 +91,30 @@ you will get a plain text response that includes all the current metric values c
 default collector registry.
 
 ```text
-# HELP http_requests_handled Received HTTP request count
-# TYPE http_requests_handled counter
-http_requests_handled{path="/hello",status="200"} 4
-http_requests_handled{path="/secret",status="401"} 2
+# HELP http_request_duration_seconds Time taken to process request in seconds.
+# TYPE http_request_duration_seconds histogram
+http_request_duration_seconds_sum{path="/hello",status="200"} 11,1500155879185
+http_request_duration_seconds_count{path="/hello",status="200"} 8
+http_request_duration_seconds_bucket{path="/hello",status="200",le="0.005"} 6
+http_request_duration_seconds_bucket{path="/hello",status="200",le="0.01"} 6
+http_request_duration_seconds_bucket{path="/hello",status="200",le="0.025"} 6
+http_request_duration_seconds_bucket{path="/hello",status="200",le="0.05"} 6
+http_request_duration_seconds_bucket{path="/hello",status="200",le="0.075"} 6
+http_request_duration_seconds_bucket{path="/hello",status="200",le="0.1"} 6
+http_request_duration_seconds_bucket{path="/hello",status="200",le="0.25"} 6
+http_request_duration_seconds_bucket{path="/hello",status="200",le="0.5"} 6
+http_request_duration_seconds_bucket{path="/hello",status="200",le="0.75"} 6
+http_request_duration_seconds_bucket{path="/hello",status="200",le="1"} 6
+http_request_duration_seconds_bucket{path="/hello",status="200",le="2.5"} 6
+http_request_duration_seconds_bucket{path="/hello",status="200",le="5"} 7
+http_request_duration_seconds_bucket{path="/hello",status="200",le="7.5"} 7
+http_request_duration_seconds_bucket{path="/hello",status="200",le="10"} 8
+http_request_duration_seconds_bucket{path="/hello",status="200",le="+Inf"} 8
+http_request_duration_seconds_sum 11.1500155879185
+http_request_duration_seconds_count 8
+# HELP http_requests_count Received HTTP request count.
+# TYPE http_requests_count counter
+http_requests_count{path="/hello",status="200"} 8
 ```
 
 ## Additional info
