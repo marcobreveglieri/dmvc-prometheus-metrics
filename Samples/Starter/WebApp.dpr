@@ -1,4 +1,4 @@
-program Starter;
+program WebApp;
 
 {$APPTYPE CONSOLE}
 
@@ -7,8 +7,8 @@ uses
   System.SysUtils,
   IdHTTPWebBrokerBridge,
   Web.WebReq,
-  WebModules.App in 'WebModules.App.pas' {AppWebModule: TWebModule},
-  Controllers.Demo in 'Controllers.Demo.pas';
+  WebApp.Controllers.Demo in 'WebApp.Controllers.Demo.pas',
+  WebApp.WebModules.Main in 'WebApp.WebModules.Main.pas' {MainModule: TWebModule};
 
 {$R *.res}
 
@@ -37,7 +37,7 @@ begin
     if WebRequestHandler <> nil then
       WebRequestHandler.WebModuleClass := WebModuleClass;
     WebRequestHandlerProc.MaxConnections := 1024;
-    StartServer(9000);
+    StartServer(8000);
   except
     on E: Exception do
       Writeln(E.ClassName, ': ', E.Message);

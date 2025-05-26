@@ -1,4 +1,4 @@
-object AppWebModule: TAppWebModule
+object MainModule: TMainModule
   OnCreate = WebModuleCreate
   OnDestroy = WebModuleDestroy
   Actions = <

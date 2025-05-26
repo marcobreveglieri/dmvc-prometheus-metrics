@@ -1,4 +1,4 @@
-unit WebModules.App;
+unit WebApp.WebModules.Main;
 
 interface
 
@@ -10,7 +10,7 @@ type
 
 { TAppWebModule }
 
-  TAppWebModule = class(TWebModule)
+  TMainModule = class(TWebModule)
     procedure WebModuleCreate(Sender: TObject);
     procedure WebModuleDestroy(Sender: TObject);
   private
@@ -18,22 +18,23 @@ type
   end;
 
 var
-  WebModuleClass: TComponentClass = TAppWebModule;
+  WebModuleClass: TComponentClass = TMainModule;
 
 implementation
 
 {$R *.dfm}
 
 uses
-  MVCFramework.Middleware.Metrics,
   Prometheus.Collectors.Counter,
-  Controllers.Demo;
+  Prometheus.Registry,
+  MVCFramework.Middleware.Metrics,
+  WebApp.Controllers.Demo;
 
 { TAppWebModule }
 
-procedure TAppWebModule.WebModuleCreate(Sender: TObject);
+procedure TMainModule.WebModuleCreate(Sender: TObject);
 begin
-  // Creates the Delphi MVC Framework server application engine.
+  // Create the Delphi MVC Framework server application engine.
   FEngine := TMVCEngine.Create(Self);
 
   // Add the metrics middleware! It will export all values using the
@@ -49,13 +50,17 @@ begin
 
   // Configure a sample counter metric for later use with some labels
   // and register it into the default collector registry.
-  TCounter
-    .Create('http_requests_count', 'Received HTTP request count', ['path', 'status'])
-    .Register();
+  if not TCollectorRegistry.DefaultRegistry.HasCollector('http_requests_total') then
+  begin
+    TCounter
+      .Create('http_requests_total', 'Received HTTP request count', ['path', 'status'])
+      .Register();
+  end;
 end;
 
-procedure TAppWebModule.WebModuleDestroy(Sender: TObject);
+procedure TMainModule.WebModuleDestroy(Sender: TObject);
 begin
+  // Free the Delphi MVC Framework server application engine.
   FEngine.Free;
 end;
 
